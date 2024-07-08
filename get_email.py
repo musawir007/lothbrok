@@ -1,9 +1,32 @@
 import requests
-from termcolor import colored
 import sys
 import time
 import os
 # os.system("pip install pyfiglet")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+
+
 
 print(''' _ __ ___  _   _ ___  __ ___      _(_)_ __
 | '_ ` _ \| | | / __|/ _` \ \ /\ / / | '__|
@@ -22,13 +45,13 @@ def slow_print(text, delay=0.1, color='\033[92m'):
     print()  # Move to the next line
 
 # Example usage
-slow_print("______________________________________________________", delay=0.05)
+slow_print("___________________________________________________", delay=0.05)
 print("\033[92m")
 
-slow_print("<<<<<<<<<<<<<<<<<<<< GENERATE EMAIL >>>>>>>>>>>>>>>>>>>", delay=0.05)
+slow_print("<<<<<<<<<<<<<<<<<<<< GENERATE EMAIL >>>>>>>>>>>>>>>", delay=0.05)
 
 print("\033[92m")
-slow_print("______________________________________________________", delay=0.05)
+slow_print("___________________________________________________", delay=0.05)
 print("\033[92m")
 
 
@@ -48,8 +71,8 @@ headers = {
 
 response = requests.post(url, data=payload, headers=headers)
 
-slow_print("*******************************************************", delay=0.05)
+slow_print("***************************************************", delay=0.05)
 print("\033[92m")
 print(f"email: {response.json()[0]}")
 print("\033[92m")
-slow_print("*******************************************************", delay=0.05)
+slow_print("***************************************************", delay=0.05)
