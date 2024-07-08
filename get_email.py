@@ -1,21 +1,14 @@
 import requests
-import pyfiglet
-pyfiglet.print_figlet("musawir",colors="")
-import pyfiglet
 from termcolor import colored
 import sys
 import time
 import os
-os.system("pip install pyfiglet")
+# os.system("pip install pyfiglet")
 
-# Generate ASCII art
-ascii_art = pyfiglet.figlet_format("musawir")
-
-# Color the ASCII art (green in this case)
-colored_ascii_art = colored(ascii_art, 'green')
-
-# Print the colored ASCII art
-print(colored_ascii_art)
+print(''' _ __ ___  _   _ ___  __ ___      _(_)_ __
+| '_ ` _ \| | | / __|/ _` \ \ /\ / / | '__|
+| | | | | | |_| \__ \ (_| |\ V  V /| | |
+|_| |_| |_|\__,_|___/\__,_| \_/\_/ |_|_|''')
 
 
 
