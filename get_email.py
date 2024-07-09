@@ -54,33 +54,37 @@ response = requests.post(url, data=payload, headers=headers)
 
 
 
-slow_print("***************************************************", delay=0.02)
+slow_print("**************************************************", delay=0.02)
 print("\033[92m")
 print(f"email: {response.json()[0]}")
 mail_box = response.json()[0]
 print("\033[92m")
-slow_print("***************************************************", delay=0.02)
+slow_print("**************************************************", delay=0.02)
 
 
 
+while True:
+    new = input("get sms yes or not :- ")
 
-new = input("get sms yes or not :- ")
+    if new.lower() == "yes":
+        conn = http.client.HTTPSConnection("temp-mail-temporary-email.p.rapidapi.com")
+        
+        payload = f"-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n{mail_box}\r\n-----011000010111000001101001--\r\n\r\n"
 
-if new.lower() == "yes":
-    conn = http.client.HTTPSConnection("temp-mail-temporary-email.p.rapidapi.com")
-    
-    payload = f"-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n{mail_box}\r\n-----011000010111000001101001--\r\n\r\n"
+        headers = {
+            'x-rapidapi-key': "b6d2c5b5d9msh03f41a2ef871027p11a1e8jsn797fd7bafe37",
+            'x-rapidapi-host': "temp-mail-temporary-email.p.rapidapi.com",
+            'Content-Type': "multipart/form-data; boundary=---011000010111000001101001"
+        }
 
-    headers = {
-        'x-rapidapi-key': "b6d2c5b5d9msh03f41a2ef871027p11a1e8jsn797fd7bafe37",
-        'x-rapidapi-host': "temp-mail-temporary-email.p.rapidapi.com",
-        'Content-Type': "multipart/form-data; boundary=---011000010111000001101001"
-    }
+        conn.request("POST", "/get_messages", payload, headers)
 
-    conn.request("POST", "/get_messages", payload, headers)
+        res = conn.getresponse()
+        data = res.read()
 
-    res = conn.getresponse()
-    data = res.read()
+        print(data.decode("utf-8"))
+    pr = input("tool exit :- ")
 
-    print(data.decode("utf-8"))
+    if pr.lower() == 'exit':
+        break
 
