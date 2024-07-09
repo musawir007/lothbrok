@@ -5,6 +5,9 @@ import os
 # os.system("pip install pyfiglet")
 print("\033[92m")
 print("\033[92m")
+print("\033[92m")
+print("\033[92m")
+print("\033[92m")
 
 
 
@@ -25,14 +28,16 @@ def slow_print(text, delay=0.1, color='\033[92m'):
     print()  # Move to the next line
 
 # Example usage
-slow_print("___________________________________________________", delay=0.05)
+slow_print("___________________________________________________", delay=0.02)
 print("\033[92m")
 
-slow_print("<<<<<<<<<<<<<<<<<<<< GENERATE EMAIL >>>>>>>>>>>>>>>", delay=0.05)
+slow_print("<<<<<<<<<<<<<<<<<<<< GENERATE EMAIL >>>>>>>>>>>>>>>", delay=0.02)
 
 print("\033[92m")
-slow_print("___________________________________________________", delay=0.05)
+slow_print("___________________________________________________", delay=0.02)
 print("\033[92m")
+
+
 
 
 
@@ -44,15 +49,25 @@ url = "https://temp-mail-temporary-email.p.rapidapi.com/domain"
 
 payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"count\"\r\n\r\n1\r\n-----011000010111000001101001--\r\n\r\n"
 headers = {
-	"x-rapidapi-key": "d97ad460d8msh47ea613332686f8p10fe95jsn7de0ccd346bb",
+	"x-rapidapi-key": "b6d2c5b5d9msh03f41a2ef871027p11a1e8jsn797fd7bafe37",
 	"x-rapidapi-host": "temp-mail-temporary-email.p.rapidapi.com",
 	"Content-Type": "multipart/form-data; boundary=---011000010111000001101001"
 }
 
 response = requests.post(url, data=payload, headers=headers)
 
-slow_print("***************************************************", delay=0.05)
+
+
+slow_print("***************************************************", delay=0.02)
 print("\033[92m")
 print(f"email: {response.json()[0]}")
 print("\033[92m")
-slow_print("***************************************************", delay=0.05)
+slow_print("***************************************************", delay=0.02)
+
+
+
+
+# new = input("get sms yes or not :- ")
+
+# # if new.lower() == "yes":
+
