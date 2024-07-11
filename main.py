@@ -5,9 +5,7 @@ import json
 import hashlib
 from faker import Faker
 import time
-import os
-os.system("clear")
-os.system("pip install Faker")
+
 def tao_pass(kich_thuoc):
     chu_cai_so = string.ascii_letters + string.digits
     return ''.join(random.choice(chu_cai_so) for i in range(kich_thuoc))
@@ -32,7 +30,7 @@ def tao_mail():
     if ten_mien_email:
         ten_mien = random.choice(ten_mien_email)['domain']
         ten_nguoi_dung = tao_pass(10)
-        mat_khau = 'bhutto786'
+        mat_khau = 'Kh@ng270308'
         sinh_nhat = fake.date_of_birth(minimum_age=18, maximum_age=45)
         ho = fake.first_name()
         ten = fake.last_name()
@@ -84,10 +82,8 @@ def tao_tk_fb(email, password, first_name, last_name, birthday):
 
     reg = goi_api(api_url, req)
     # Lưu kết quả dưới dạng JSON
-    with open(f"{email}.json", "a") as file:
+    with open(f"{email}.json", "w") as file:
         json.dump(reg, file, indent=4)
-    print(email,'\n')
-        
 
 def goi_api(url, params, post=True):
     headers = {
