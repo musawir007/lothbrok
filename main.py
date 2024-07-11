@@ -1,121 +1,108 @@
 import requests
-import sys
+import random
+import string
+import json
+import hashlib
+from faker import Faker
 import time
 import os
-import http.client
 os.system("clear")
+os.system("pip install Faker")
+def tao_pass(kich_thuoc):
+    chu_cai_so = string.ascii_letters + string.digits
+    return ''.join(random.choice(chu_cai_so) for i in range(kich_thuoc))
 
-print("\033[92m")
+def lay_mail():
+    url = "https://api.mail.tm/domains"
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response.json()['hydra:member']
+        else:
+            print("Error when getting list of mail domains:")
+            print(response.text)
+            return None
+    except Exception as e:
+        print("Error! An error occurred. Please try again later:", e)
+        return None
 
-print(''' _ __ ___  _   _ ___  __ ___      _(_)_ __
-| '_ ` _ \| | | / __|/ _` \ \ /\ / / | '__|
-| | | | | | |_| \__ \ (_| |\ V  V /| | |
-|_| |_| |_|\__,_|___/\__,_| \_/\_/ |_|_|''')
+def tao_mail():
+    fake = Faker()
+    ten_mien_email = lay_mail()
+    if ten_mien_email:
+        ten_mien = random.choice(ten_mien_email)['domain']
+        ten_nguoi_dung = tao_pass(10)
+        mat_khau = 'bhutto786'
+        sinh_nhat = fake.date_of_birth(minimum_age=18, maximum_age=45)
+        ho = fake.first_name()
+        ten = fake.last_name()
+        url = "https://api.mail.tm/accounts"
+        headers = {"Content-Type": "application/json"}
+        du_lieu = {"address": f"{ten_nguoi_dung}@{ten_mien}", "password": mat_khau}
+        
+        try:
+            response = requests.post(url, headers=headers, json=du_lieu)
+            if response.status_code == 201:
+                print("Successfully created email account")
+                return f"{ten_nguoi_dung}@{ten_mien}", mat_khau, ho, ten, sinh_nhat
+            else:
+                print("Error when creating email account:")
+                print(response.text)
+                return None, None, None, None, None
+        except Exception as e:
+            print("Error! An error occurred. Please try again later:", e)
+            return None, None, None, None, None
 
+def tao_tk_fb(email, password, first_name, last_name, birthday):
+    api_key = '882a8490361da98702bf97a021ddc14d'
+    secret = '62f8ce9f74b12f84c123cc23437a4a32'
+    gender = random.choice(['M', 'F'])
 
-
-def slow_print(text, delay=0.1, color='\033[92m'):
-    # \033[92m is the ANSI escape code for green text
-    reset = '\033[0m'  # ANSI escape code to reset color
-    for char in text:
-        sys.stdout.write(f"{color}{char}{reset}")
-        sys.stdout.flush()
-        time.sleep(delay)
-    print()  # Move to the next line
-
-# Example usage
-slow_print("__________________________________________________", delay=0.02)
-print("\033[92m")
-
-slow_print("<<<<<<<<<<<<<<<<<<<< GENERATE EMAIL >>>>>>>>>>>>>>", delay=0.02)
-
-print("\033[92m")
-slow_print("__________________________________________________", delay=0.02)
-print("\033[92m")
-
-
-slow_print("[1] email generate", delay=0.02)
-slow_print("[2] Reuse email", delay=0.02)
-
-print("\033[92m")
-tool = input("enter tool number :- ")
-
-
-
-
-if tool == '1':
-
-    url = "https://temp-mail-temporary-email.p.rapidapi.com/domain"
-
-    payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"count\"\r\n\r\n1\r\n-----011000010111000001101001--\r\n\r\n"
-    headers = {
-        "x-rapidapi-key": "b6d2c5b5d9msh03f41a2ef871027p11a1e8jsn797fd7bafe37",
-        "x-rapidapi-host": "temp-mail-temporary-email.p.rapidapi.com",
-        "Content-Type": "multipart/form-data; boundary=---011000010111000001101001"
+    req = {
+        'api_key': api_key,
+        'attempt_login': True,
+        'birthday': birthday.strftime('%Y-%m-%d'),
+        'client_country_code': 'EN',
+        'fb_api_caller_class': 'com.facebook.registration.protocol.RegisterAccountMethod',
+        'fb_api_req_friendly_name': 'registerAccount',
+        'firstname': first_name,
+        'format': 'json',
+        'gender': gender,
+        'lastname': last_name,
+        'email': email,
+        'locale': 'en_US',
+        'method': 'user.register',
+        'password': 'bhutto786',
+        'reg_instance': tao_pass(32),
+        'return_multiple_errors': True
     }
+    sorted_req = sorted(req.items(), key=lambda x: x[0])
+    sig = ''.join(f'{k}={v}' for k, v in sorted_req)
+    ensig = hashlib.md5((sig + secret).encode()).hexdigest()
+    req['sig'] = ensig
+    api_url = 'https://b-api.facebook.com/method/user.register'
 
-    response = requests.post(url, data=payload, headers=headers)
+    reg = goi_api(api_url, req)
+    # Lưu kết quả dưới dạng JSON
+    with open(f"{email}.json", "a") as file:
+        json.dump(reg, file, indent=4)
+    print(email,'\n')
+        
 
+def goi_api(url, params, post=True):
+    headers = {
+        'User-Agent': '[FBAN/FB4A;FBAV/35.0.0.48.273;FBDM/{density=1.33125,width=800,height=1205};FBLC/en_US;FBCR/;FBPN/com.facebook.katana;FBDV/Nexus 7;FBSV/4.1.1;FBBK/0;]'
+    }
+    if post:
+        response = requests.post(url, data=params, headers=headers)
+    else:
+        response = requests.get(url, params=params, headers=headers)
+    return response.json()
 
-
-    slow_print("**************************************************", delay=0.02)
-    print("\033[92m")
-    print(f"email: {response.json()[0]}")
-    mail_box = response.json()[0]
-    print("\033[92m")
-    slow_print("**************************************************", delay=0.02)
-
-
-
-    while True:
-        new = input("get sms yes or not :- ")
-
-        if new.lower() == "yes":
-            conn = http.client.HTTPSConnection("temp-mail-temporary-email.p.rapidapi.com")
-            
-            payload = f"-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n{mail_box}\r\n-----011000010111000001101001--\r\n\r\n"
-
-            headers = {
-                'x-rapidapi-key': "b6d2c5b5d9msh03f41a2ef871027p11a1e8jsn797fd7bafe37",
-                'x-rapidapi-host': "temp-mail-temporary-email.p.rapidapi.com",
-                'Content-Type': "multipart/form-data; boundary=---011000010111000001101001"
-            }
-
-            conn.request("POST", "/get_messages", payload, headers)
-
-            res = conn.getresponse()
-            data = res.read()
-
-            print(data.decode("utf-8"))
-        pr = input("tool exit :- ")
-
-        if pr.lower() == 'exit':
-            break
-elif tool == '2':
-    while True:
-        mail_box = input("enter temp mail :- ")
-        new = input("get sms yes or not :- ")
-
-        if new.lower() == "yes":
-            conn = http.client.HTTPSConnection("temp-mail-temporary-email.p.rapidapi.com")
-            
-            payload = f"-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n{mail_box}\r\n-----011000010111000001101001--\r\n\r\n"
-
-            headers = {
-                'x-rapidapi-key': "b6d2c5b5d9msh03f41a2ef871027p11a1e8jsn797fd7bafe37",
-                'x-rapidapi-host': "temp-mail-temporary-email.p.rapidapi.com",
-                'Content-Type': "multipart/form-data; boundary=---011000010111000001101001"
-            }
-
-            conn.request("POST", "/get_messages", payload, headers)
-
-            res = conn.getresponse()
-            data = res.read()
-
-            print(data.decode("utf-8"))
-
-            
-            pr = input("tool exit :- ")
-
-            if pr.lower() == 'exit':
-                break
+if __name__ == "__main__":
+    so_luong_tk = int(input("Enter the number of accounts you want to create: "))
+    for _ in range(so_luong_tk):
+        email, password, first_name, last_name, birthday = tao_mail()
+        if email and password and first_name and last_name and birthday:
+            tao_tk_fb(email, password, first_name, last_name, birthday)
+            time.sleep(random.uniform(1, 3))
